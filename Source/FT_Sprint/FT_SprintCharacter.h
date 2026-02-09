@@ -76,5 +76,19 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+public:
+	//MY CODE
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerAttributes|MyMovement")
+	double MaxNoSprintSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerAttributes|MyMovement")
+	double MinAnalogNoSprintSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerAttributes|MyMovement")
+	double MaxSprintSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerAttributes|MyMovement")
+	double MinAnalogSprintSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerAttributes|MyMovement")
+	float stamina;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerAttributes|MyMovement")
+	bool sprint;
 };
 

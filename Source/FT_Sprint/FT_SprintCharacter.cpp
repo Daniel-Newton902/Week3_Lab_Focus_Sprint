@@ -44,7 +44,6 @@ AFT_SprintCharacter::AFT_SprintCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
 
-
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -64,7 +63,28 @@ void AFT_SprintCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+	MaxNoSprintSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	MinAnalogNoSprintSpeed = GetCharacterMovement()->MinAnalogWalkSpeed;
+	MaxSprintSpeed = GetCharacterMovement()->MaxWalkSpeed * 2;
+	MinAnalogSprintSpeed = GetCharacterMovement()->MinAnalogWalkSpeed * 3;
+	stamina = 100.0f;
+	sprint = false;
+
 }
+
+void Tick(){
+	if (sprint) {
+		stamina -= 1;
+		if (stamina < 1) {
+			sprint = false;
+		}
+	}
+	else {
+		stamina+=1
+	}
+}
+
+
 
 //////////////////////////////////////////////////////////////////////////
 // Input
@@ -142,15 +162,21 @@ void AFT_SprintCharacter::Look(const FInputActionValue& Value)
 /** Connah methods implementation */
 void AFT_SprintCharacter::SprintStart(const FInputActionValue& Value)
 {
-	// we could set speeds, but i like scalers 
-	GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed * 2;
-	// make it so they have a speed up route
-	GetCharacterMovement()->MinAnalogWalkSpeed = GetCharacterMovement()->MinAnalogWalkSpeed * 3;
+	if (sprint) {
+		// we could set speeds, but i like scalers
+		GetCharacterMovement()->MaxWalkSpeed = MaxSprintSpeed;
+		// make it so they have a speed up route
+		GetCharacterMovement()->MinAnalogWalkSpeed = MinAnalogSprintSpeed;
+	}
 }
 
 void AFT_SprintCharacter::SprintStop(const FInputActionValue& Value)
 {
 	// Reset the speeds
-	GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed / 2;
-	GetCharacterMovement()->MinAnalogWalkSpeed = GetCharacterMovement()->MinAnalogWalkSpeed / 3;
+	//Daniel note:
+	// the OG implementation (multplying one veriable with Hold in the sprint Action)
+	// isn't perfect as the speed builds due to rounding errors
+	sprint = false;
+	GetCharacterMovement()->MaxWalkSpeed =MaxNoSprintSpeed;
+	GetCharacterMovement()->MinAnalogWalkSpeed =MinAnalogNoSprintSpeed;
 }
