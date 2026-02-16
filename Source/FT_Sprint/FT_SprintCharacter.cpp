@@ -25,7 +25,7 @@ AFT_SprintCharacter::AFT_SprintCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -57,6 +57,8 @@ AFT_SprintCharacter::AFT_SprintCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+	stamina = 100.0f;
+	sprint = false;
 }
 
 void AFT_SprintCharacter::BeginPlay()
@@ -67,22 +69,14 @@ void AFT_SprintCharacter::BeginPlay()
 	MinAnalogNoSprintSpeed = GetCharacterMovement()->MinAnalogWalkSpeed;
 	MaxSprintSpeed = GetCharacterMovement()->MaxWalkSpeed * 2;
 	MinAnalogSprintSpeed = GetCharacterMovement()->MinAnalogWalkSpeed * 3;
-	stamina = 100.0f;
-	sprint = false;
-
 }
 
-void Tick(){
-	if (sprint) {
-		stamina -= 1;
-		if (stamina < 1) {
-			sprint = false;
-		}
-	}
-	else {
-		stamina+=1
-	}
-}
+//void Tick() {
+	//Every tick increase the stamina
+	//if (stamina < 100.0f){
+		//stamina += 1;
+	//}
+//}
 
 
 
